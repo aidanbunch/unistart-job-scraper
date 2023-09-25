@@ -1,0 +1,42 @@
+   service: scrape
+
+   provider:
+     name: aws
+     runtime: nodejs18.x
+     region: us-east-1
+     iamRoleStatements:
+       - Effect: Allow
+         Action:
+           - s3:PutObject
+         Resource: arn:aws:s3:::storage/*
+
+   functions:
+     entry-level-jobs:
+       handler: index.handler
+       timeout: 900
+       memorySize: 10000
+       events:
+         - schedule: cron(0 14 ? * MON *)
+         - s3:
+             bucket: scraped-job-objects
+             event: s3:ObjectCreated:*
+             rules:
+               - prefix: ''
+               - suffix: '.json'
+         - s3:
+             bucket: scraped-job-objects
+             event: s3:ObjectUpdated:*
+             rules:
+               - prefix: ''
+               - suffix: '.json'
+
+   resources:
+     Resources:
+       ScrapedJobObjectsBucket:
+         Type: AWS::S3::Bucket
+         Properties:
+           BucketName: scraped-job-objects          
+
+   plugins:
+     - serverless-dotenv-plugin
+     - serverless-offline
