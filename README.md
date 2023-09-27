@@ -1,5 +1,5 @@
 # Unistart Job Scraper
-This script utilizes Puppeteer bots to scrape entry-level jobs from various job boards in parallel. The service is set up to be deployed on AWS with the Serverless framework. It deploys to a Lambda function and runs periodically on an EventBridge rule schedule at 7:00 AM PST every Monday. It then stores the results of the scraping in a file called `jobs.json` in an S3 bucket.
+This script utilizes Puppeteer bots to scrape entry-level jobs from various job boards in parallel. The service is set up to be deployed on AWS with the Serverless framework. It deploys to a Lambda function and runs periodically on an EventBridge rule scheduled to trigger an invocation at 7:00 AM PST every Monday. It then stores the results of the scraping in a file called `jobs.json` in an S3 bucket.
 
 ## Deployment
 To deploy the job scraper, follow these steps:
