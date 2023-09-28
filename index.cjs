@@ -11,7 +11,7 @@ const { removeDuplicates, categorizeJobs, writeJSONToOutputFile } = require("./u
 
 exports.handler = async (event, context) => {
 	const cluster = await Cluster.launch({
-		concurrency: Cluster.CONCURRENCY_BROWSER,
+		concurrency: Cluster.CONCURRENCY_CONTEXT,
 		maxConcurrency: 4,
 		timeout: 900000,
 	});
