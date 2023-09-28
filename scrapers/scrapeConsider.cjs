@@ -72,7 +72,7 @@ async function scrapeConsider(page, url) {
 						"Job Title": job.querySelector(".job-list-job-title a").innerText,
 						"Company Name": companyName,
 						"Job Link": job.querySelector(".job-list-job-title a").href,
-						Role: "Internship",
+						Role: "Internship", // default to internship since we use internships only filter
 						"Experience requirement": null,
 						Pay: null,
 						Locations: locations.length > 0 ? locations : null,

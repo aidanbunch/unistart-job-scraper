@@ -64,7 +64,13 @@ async function scrapeTopStartups(page, url) {
 				job["Job Title"] = titleElement ? titleElement.innerText : null;
 				job["Company Name"] = companyElement ? companyElement.innerText : null;
 				job["Job Link"] = jobLinkElement ? jobLinkElement.href : null;
-				job["Role"] = "Full time"; // full time roles offered
+				if (titleElement) {
+					job["Role"] = titleElement.innerText.toLowerCase().includes("intern")
+						? "Internship"
+						: "Full Time";
+				} else {
+					job["Role"] = "Full time";
+				}
 				job["Experience requirement"] =
 					experienceElementArray.length > 0
 						? experienceElementArray[0].innerText.split(": ")[1]
