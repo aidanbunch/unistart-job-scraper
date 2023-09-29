@@ -234,7 +234,6 @@ const Constants = {
 				"benefits",
 				"payroll",
 				"training",
-				"development",
 			],
 			phrases: ["human resources", "talent acquisition", "employee relations"],
 		},
