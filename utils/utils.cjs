@@ -83,15 +83,31 @@ function writeJSONToOutputFile(fileName, data) {
 	if (!fs.existsSync("output")) {
 		fs.mkdirSync("output");
 	}
-
 	const fullPath = path.join("output", fileName);
 
 	fs.writeFileSync(fullPath, JSON.stringify(data, null, 2));
 }
+
+function appendJSONToFile(fileName, newData) {
+	if (!fs.existsSync("output")) {
+		fs.mkdirSync("output");
+	}
+	const fullPath = path.join("output", fileName);
+  
+	let existingData = [];
+	if (fs.existsSync(fullPath)) {
+	  const fileContent = fs.readFileSync(fullPath, "utf8");
+	  existingData = JSON.parse(fileContent);
+	}
+  
+	const updatedData = [...existingData, ...newData];
+	fs.writeFileSync(fullPath, JSON.stringify(updatedData, null, 2));
+  }
 
 module.exports = {
 	delay,
 	categorizeJobs,
 	removeDuplicates,
 	writeJSONToOutputFile,
+	appendJSONToFile,
 };
