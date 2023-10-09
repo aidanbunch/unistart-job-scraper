@@ -2,7 +2,7 @@ const Constants = require("../utils/constants.cjs");
 const { delay } = require("../utils/utils.cjs");
 
 async function scrapeBuiltIn(page, url) {
-	await delay(Constants.Delays.Medium)
+	await delay(Constants.Delays.Medium);
 	await page.goto(url, { waitUntil: "networkidle2", timeout: 0 });
 	await page.setViewport({
 		width: Constants.WideViewportDimensions.width,
@@ -48,7 +48,10 @@ async function scrapeBuiltIn(page, url) {
 								experienceRequirement = tagElement.textContent;
 							}
 							// checks if the text content has "ago" in it, if so, it's the posted date
-							if (tagElement.textContent.toLowerCase().includes("ago")) {
+							if (
+								tagElement.textContent.toLowerCase().includes("ago") &&
+								tagElement.textContent.toLowerCase().includes("day")
+							) {
 								posted = `Posted ${tagElement.textContent}`;
 							}
 						}
@@ -63,8 +66,8 @@ async function scrapeBuiltIn(page, url) {
 							"Job Link": jobLink,
 							Role: role,
 							"Experience requirement": experienceRequirement,
-							Pay: pay,
-							Locations: [location],
+							Pay: /\d/.test(pay) ? pay : null,
+							Locations:  [location],
 							"Job Skills": jobSkills.length > 0 ? jobSkills : null,
 							Posted: posted,
 						});
@@ -86,7 +89,7 @@ async function scrapeBuiltIn(page, url) {
 
 			// If a "Next" button was found and it's not disabled, navigate to the next page
 			if (nextButton) {
-				await delay(Constants.Delays.Medium)
+				await delay(Constants.Delays.Medium);
 				await page.goto(nextButton, { waitUntil: "networkidle2", timeout: 0 });
 			} else {
 				// If no "Next" button was found or it's disabled, we're done

@@ -107,7 +107,12 @@ async function scrapeYComb(page, url) {
 										experienceElements.length > 0
 											? experienceElements[0].innerText
 											: null,
-									Pay: payElements.length > 0 ? payElements[0].innerText : null,
+									Pay:
+										payElements.length > 0
+											? /\d/.test(payElements[0].innerText)
+												? payElements[0].innerText
+												: null
+											: null,
 									Locations: [jobProperties[0].innerText],
 									"Job Skills": null, // skills not listed on YC
 									Posted: null, // YC doesn't provide this info

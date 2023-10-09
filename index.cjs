@@ -7,7 +7,10 @@ const AWS = require("aws-sdk");
 const { Cluster } = require("puppeteer-cluster");
 
 const ScrapingMap = require("./utils/map.cjs");
-const { removeDuplicates, categorizeJobs, writeJSONToOutputFile } = require("./utils/utils.cjs");
+const {
+	writeJSONToOutputFile,
+	prepareJobData,
+} = require("./utils/utils.cjs");
 
 exports.handler = async (event, context) => {
 	const cluster = await Cluster.launch({
@@ -30,10 +33,9 @@ exports.handler = async (event, context) => {
 	await cluster.idle();
 	await cluster.close();
 
-	const jobItems = removeDuplicates(results);
+	const formattedJobItems = prepareJobData(results);
 
-	const categorizedJobItems = categorizeJobs(jobItems);
-
+	// write jobs.json file to s3 bucket
 	// const params = {
 	// 	Bucket: "scraped-job-objects",
 	// 	Key: "jobs.json",
@@ -43,6 +45,5 @@ exports.handler = async (event, context) => {
 	// };
 	// await s3.putObject(params).promise();
 
-	writeJSONToOutputFile("jobs.json", categorizedJobItems);
-
+	writeJSONToOutputFile("jobs.json", formattedJobItems);
 };

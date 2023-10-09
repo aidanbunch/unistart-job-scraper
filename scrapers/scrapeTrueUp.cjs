@@ -148,7 +148,7 @@ async function scrapeTrueUp(page, url) {
 									? "Internship"
 									: "Full time", // all seem to be full time roles (besides internships)
 								"Experience requirement": experience,
-								Pay: pay,
+								Pay: /\d/.test(pay) ? pay : null,
 								Locations: locationNormalized ? [locationNormalized] : null,
 								"Job Skills": jobSkills.length > 0 ? jobSkills : null,
 								Posted: posted,

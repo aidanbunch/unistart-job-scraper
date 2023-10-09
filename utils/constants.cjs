@@ -238,6 +238,20 @@ const Constants = {
 			phrases: ["human resources", "talent acquisition", "employee relations"],
 		},
 	},
+	SeniorKeywordsList: [
+		"Founding",
+		"Sr.",
+		"Sr",
+		"Lead",
+		"Principal",
+		"Staff",
+		"Director",
+		"Head",
+		"VP",
+		"Vice President",
+		"President",
+		"Chief",
+	],
 	Pallet: {
 		JobsApiEndpoint: "https://gen-z-vcs-jobs.pallet.com/api/v1/graphql",
 		ConstructJobLink: (listingUuid) =>
@@ -265,6 +279,9 @@ const Constants = {
 		Username: process.env.UNISTART_USERNAME,
 		Password: process.env.UNISTART_PASSWORD,
 	},
+	Path: {
+		Mappings: "./mappings"
+	}
 };
 
 module.exports = Constants;
