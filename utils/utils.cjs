@@ -3,6 +3,10 @@ const fs = require("fs");
 const Fuse = require("fuse.js");
 const Constants = require("./constants.cjs");
 
+function parseMappingFile(mappingPath) {
+	return JSON.parse(fs.readFileSync(`./mappings/${mappingPath}`, "utf8"));
+}
+
 function checkKeywordsAndPhrases(words, fullString, jobCategoriesMap) {
 	for (const word of words) {
 		for (const [category, keywordsAndPhrases] of Object.entries(
@@ -26,6 +30,9 @@ function checkKeywordsAndPhrases(words, fullString, jobCategoriesMap) {
 }
 
 function categorizeJob(jobTitle, jobSkills) {
+	const jobCategoriesMap = parseMappingFile(
+		Constants.Path.JobCategoriesMapping
+	);
 	// remove all "\", "/", ",", "(" and ")" from job titles and skills
 	const cleanedJobTitle = jobTitle.replace(/\\|\/|\,|\(|\)/g, "");
 	const cleanedJobSkills = jobSkills.map((skill) =>
@@ -40,7 +47,7 @@ function categorizeJob(jobTitle, jobSkills) {
 	let category = checkKeywordsAndPhrases(
 		jobTitleWords,
 		cleanedJobTitle,
-		Constants.JobCategoriesMap
+		jobCategoriesMap
 	);
 	if (category) {
 		return category;
@@ -49,7 +56,7 @@ function categorizeJob(jobTitle, jobSkills) {
 	category = checkKeywordsAndPhrases(
 		jobSkillsWords,
 		cleanedJobSkills.join(" "),
-		Constants.JobCategoriesMap
+		jobCategoriesMap
 	);
 	if (category) {
 		return category;
@@ -76,10 +83,12 @@ function removeDuplicates(data) {
 	return uniqueJobs;
 }
 
-function removeSeniorPositions(jobs) {
+function filterOutSeniorPositions(jobs) {
+	// parse senior keywords mapping
+	const seniorFilters = parseMappingFile(Constants.Path.SeniorFiltersMapping);
 	return jobs.filter((job) => {
 		const title = job["Job Title"];
-		return !Constants.SeniorKeywordsList.some((position) =>
+		return !seniorFilters.Seniors.keywords.some((position) =>
 			title.includes(position)
 		);
 	});
@@ -115,18 +124,8 @@ function cleanJobLinks(jobs) {
 }
 
 function normalizeLocationFields(jobs) {
-	const usCities = JSON.parse(
-		fs.readFileSync(
-			`./mappings/${Constants.Path.USCityStateMapping}`,
-			"utf8"
-		)
-	);
-	const intlCapitals = JSON.parse(
-		fs.readFileSync(
-			`./mappings/${Constants.Path.CapitalCityCountryMapping}`,
-			"utf8"
-		)
-	);
+	const usCities = parseMappingFile(Constants.Path.USCityStateMapping);
+	const intlCapitals = parseMappingFile(Constants.Path.CapitalCityCountryMapping);
 
 	// Combine the US cities and international capitals into one object
 	const allCities = { ...usCities, ...intlCapitals };
@@ -216,13 +215,13 @@ async function delay(milliseconds) {
 }
 
 function prepareJobData(jobData) {
-  const cleanedJobLinks = cleanJobLinks(jobData);
-  const uniqueJobs = removeDuplicates(cleanedJobLinks);
-  const jobsWithoutSeniorPositions = removeSeniorPositions(uniqueJobs);
-  const cleanedJobs = cleanLocationFields(jobsWithoutSeniorPositions);
-  const normalizedJobs = normalizeLocationFields(cleanedJobs);
-  const categorizedJobs = categorizeJobs(normalizedJobs);
-  return categorizedJobs;
+	const cleanedJobLinks = cleanJobLinks(jobData);
+	const uniqueJobs = removeDuplicates(cleanedJobLinks);
+	const jobsWithoutSeniorPositions = filterOutSeniorPositions(uniqueJobs);
+	const cleanedJobs = cleanLocationFields(jobsWithoutSeniorPositions);
+	const normalizedJobs = normalizeLocationFields(cleanedJobs);
+	const categorizedJobs = categorizeJobs(normalizedJobs);
+	return categorizedJobs;
 }
 
 function writeJSONToOutputFile(fileName, data) {
