@@ -280,7 +280,8 @@ const Constants = {
 		Password: process.env.UNISTART_PASSWORD,
 	},
 	Path: {
-		Mappings: "./mappings"
+		USCityStateMapping: "./mapping/city_states_mapping.json",
+		CapitalCityCountryMapping: "./mapping/cities_countries_mapping.json",
 	}
 };
 

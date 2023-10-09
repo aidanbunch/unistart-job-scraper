@@ -117,13 +117,13 @@ function cleanJobLinks(jobs) {
 function normalizeLocationFields(jobs) {
 	const usCities = JSON.parse(
 		fs.readFileSync(
-			`${Constants.Path.Mappings}/city_states_mapping.json`,
+			Constants.Path.USCityStateMapping,
 			"utf8"
 		)
 	);
 	const intlCapitals = JSON.parse(
 		fs.readFileSync(
-			`${Constants.Path.Mappings}/cities_countries_mapping.json`,
+			Constants.Path.CapitalCityCountryMapping,
 			"utf8"
 		)
 	);
