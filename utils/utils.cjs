@@ -224,14 +224,13 @@ function prepareJobData(jobData) {
 	return categorizedJobs;
 }
 
-function writeJSONToOutputFile(fileName, data) {
+function writeJSONToOutputFile(fileName, newData) {
 	if (!fs.existsSync("output")) {
 		fs.mkdirSync("output");
 	}
 	const fullPath = path.join("output", fileName);
-	const cleanedData = prepareJobData(data);
 
-	fs.writeFileSync(fullPath, JSON.stringify(cleanedData, null, 2));
+	fs.writeFileSync(fullPath, JSON.stringify(newData, null, 2));
 }
 
 function appendJSONToFile(fileName, newData) {
@@ -246,9 +245,7 @@ function appendJSONToFile(fileName, newData) {
 		existingData = JSON.parse(fileContent);
 	}
 
-	const cleanedData = prepareJobData(newData);
-
-	const updatedData = [...existingData, ...cleanedData];
+	const updatedData = [...existingData, ...newData];
 	fs.writeFileSync(fullPath, JSON.stringify(updatedData, null, 2));
 }
 

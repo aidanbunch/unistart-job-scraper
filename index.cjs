@@ -39,9 +39,9 @@ exports.handler = async (event, context) => {
 	// const params = {
 	// 	Bucket: "scraped-job-objects",
 	// 	Key: "jobs.json",
-	// 	Body: JSON.stringify({
-	// 		formattedResults
-	// 	}),
+	// 	Body: JSON.stringify(
+	// 		formattedJobItems
+	// 	),
 	// };
 	// await s3.putObject(params).promise();
 
