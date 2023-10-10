@@ -1,23 +1,39 @@
 require("dotenv").config();
 const AWS = require("aws-sdk");
-// const s3 = new AWS.S3({
-// 	accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-// 	secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-//   });
+const s3 = new AWS.S3({
+	accessKeyId: process.env.UNISTART_AWS_ACCESS_KEY_ID,
+	secretAccessKey: process.env.UNISTART_AWS_SECRET_ACCESS_KEY,
+});
+const chromium = require("@sparticuz/chromium");
 const { Cluster } = require("puppeteer-cluster");
 
 const ScrapingMap = require("./utils/map.cjs");
-const {
-	writeJSONToOutputFile,
-	prepareJobData,
-} = require("./utils/utils.cjs");
+const { prepareJobData, writeJSONToOutputFile } = require("./utils/utils.cjs");
+const Constants = require("./utils/constants.cjs");
 
 exports.handler = async (event, context) => {
-	const cluster = await Cluster.launch({
-		concurrency: Cluster.CONCURRENCY_CONTEXT,
-		maxConcurrency: 4,
-		timeout: 900000,
-	});
+	let cluster;
+	if (Constants.RunningLocally) {
+		cluster = await Cluster.launch({
+			concurrency: Cluster.CONCURRENCY_CONTEXT,
+			maxConcurrency: 8,
+			timeout: 900000,
+		});
+	} else {
+		chromium.setHeadlessMode = true;
+
+		cluster = await Cluster.launch({
+			puppeteerOptions: {
+				args: chromium.args,
+				defaultViewport: chromium.defaultViewport,
+				executablePath: await chromium.executablePath(),
+				headless: chromium.headless,
+			},
+			concurrency: Cluster.CONCURRENCY_CONTEXT,
+			maxConcurrency: 8,
+			timeout: 900000,
+		});
+	}
 
 	const results = [];
 
@@ -35,15 +51,14 @@ exports.handler = async (event, context) => {
 
 	const formattedJobItems = prepareJobData(results);
 
-	// write jobs.json file to s3 bucket
-	// const params = {
-	// 	Bucket: "scraped-job-objects",
-	// 	Key: "jobs.json",
-	// 	Body: JSON.stringify(
-	// 		formattedJobItems
-	// 	),
-	// };
-	// await s3.putObject(params).promise();
-
-	writeJSONToOutputFile("jobs.json", formattedJobItems);
+	if (Constants.RunningLocally) {
+		writeJSONToOutputFile("jobs.json", formattedJobItems);
+	} else {
+		const params = {
+			Bucket: "scraped-job-objects",
+			Key: "jobs.json",
+			Body: JSON.stringify(formattedJobItems),
+		};
+		await s3.putObject(params).promise();
+	}
 };

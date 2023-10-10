@@ -28,10 +28,11 @@ npm install
 ```.env
 UNISTART_USERNAME='example_username'
 UNISTART_PASSWORD='example_password'
-AWS_ACCESS_KEY_ID='example_access_key_id'
-AWS_SECRET_ACCESS_KEY='example_secret_access_key'
+UNISTART_AWS_ACCESS_KEY_ID='example_access_key_id'
+UNISTART_AWS_SECRET_ACCESS_KEY='example_secret_access_key'
+RUNNING_LOCALLY='whether the function will be invoked locally or not, 'true' or 'false''
 ```
-5. Deploy the serverless function: Run the following command to deploy the function to AWS (assuming you have your credentials loaded):
+5. Deploy the serverless function. Make sure your `RUNNING_LOCALLY` key is set to `false` before you deploy. Run the following command to deploy the function to AWS (assuming you have your credentials loaded):
 ```
 sls deploy
 ```
@@ -46,4 +47,5 @@ To test the invocation of the function, use the following command:
 ```
 sls invoke local -f entry-level-jobs
 ```
-This command invokes the entry-level-jobs function locally with the specified event data and context.
+This command invokes the entry-level-jobs function locally. Change the `RUNNING_LOCALLY` key in the `.env` file
+to `true` to use the proper Chromium binary and get results written locally rather than to the S3 bucket.

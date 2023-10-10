@@ -33,7 +33,8 @@ const Constants = {
 		CapitalCityCountryMapping: "cities_countries_mapping.json",
 		SeniorFiltersMapping: "senior_filters_mapping.json",
 		JobCategoriesMapping: "job_categories_mapping.json",
-	}
+	},
+	RunningLocally: process.env.RUNNING_LOCALLY === "true" || false,
 };
 
 module.exports = Constants;
