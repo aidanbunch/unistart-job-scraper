@@ -114,7 +114,8 @@ function cleanJobLinks(jobs) {
 		const jobLink = job["Job Link"];
 		// remove all query params from the url
 		let cleanedJobLink = jobLink.split("?")[0];
-		// filter out any jobs that don't have an a number in the url (they used query params, so we remove them)
+		// filter out any jobs that don't have an a number in the url 
+		// they used query params to track specific job IDs, so we remove them
 		if (!cleanedJobLink.match(/\d+/g)) {
 			return null;
 		}
@@ -154,13 +155,8 @@ function normalizeLocationFields(jobs) {
 					primaryLocation = location.split("/")[0];
 				}
 
-				// If location has multiple commas, only consider the first two
-				if (primaryLocation.split(",").length > 2) {
-					primaryLocation = primaryLocation.split(",", 2).join(",");
-				}
-				if (primaryLocation.split(",").length === 2) {
-					primaryLocation = primaryLocation.split(",")[0];
-				}
+				// If location has multiple commas, only consider the first one
+				primaryLocation = primaryLocation.split(",")[0];
 
 				// If location is a remote location, format it accordingly
 				if (primaryLocation.toLowerCase().includes("remote")) {
