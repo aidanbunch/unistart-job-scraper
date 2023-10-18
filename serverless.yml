@@ -21,7 +21,7 @@
      entry-level-jobs:
        handler: index.handler
        timeout: 900
-       memorySize: 3008
+       memorySize: 10240
        package:
           include:
             - mappings/**
