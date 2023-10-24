@@ -4,7 +4,8 @@ const s3 = new AWS.S3({
 	accessKeyId: process.env.UNISTART_AWS_ACCESS_KEY_ID,
 	secretAccessKey: process.env.UNISTART_AWS_SECRET_ACCESS_KEY,
 });
-const chromium = require("@sparticuz/chromium");
+// const chromium = require("@sparticuz/chromium");
+const chromium = require("@sparticuz/chromium-min");
 const { Cluster } = require("puppeteer-cluster");
 
 const ScrapingMap = require("./utils/map.cjs");
@@ -16,7 +17,7 @@ exports.handler = async (event, context) => {
 	if (Constants.RunningLocally) {
 		cluster = await Cluster.launch({
 			concurrency: Cluster.CONCURRENCY_CONTEXT,
-			maxConcurrency: 8,
+			maxConcurrency: 4,
 			timeout: 900000,
 		});
 	} else {
@@ -26,11 +27,14 @@ exports.handler = async (event, context) => {
 			puppeteerOptions: {
 				args: chromium.args,
 				defaultViewport: chromium.defaultViewport,
-				executablePath: await chromium.executablePath(),
+				executablePath: await chromium.executablePath(
+					"https://github.com/Sparticuz/chromium/releases/download/v116.0.0/chromium-v116.0.0-pack.tar"
+				),
 				headless: chromium.headless,
+				ignoreHTTPSErrors: true,
 			},
 			concurrency: Cluster.CONCURRENCY_CONTEXT,
-			maxConcurrency: 8,
+			maxConcurrency: 4,
 			timeout: 900000,
 		});
 	}
