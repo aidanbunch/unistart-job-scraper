@@ -34,18 +34,18 @@ RUNNING_LOCALLY='whether the function will be invoked locally or not, 'true' or 
 ```
 5. Deploy the serverless function. Make sure your `RUNNING_LOCALLY` key is set to `'false'` before you deploy. Run the following command to deploy the function to AWS (assuming you have your credentials loaded):
 ```
-sls deploy
+npm run deploy
 ```
 
-## Testing
+## Scripts
 To test the scheduling and syntax, use the following command:
 ```
-sls offline start
+npm run offline
 ```
 This command starts the serverless offline plugin, allowing you to test the scheduling and syntax locally.
 To test the invocation of the function, use the following command:
 ```
-sls invoke local -f entry-level-jobs
+npm run test
 ```
 This command invokes the entry-level-jobs function locally. Change the `RUNNING_LOCALLY` key in the `.env` file
 to `'true'` to use the proper Chromium binary and get results written locally rather than to the S3 bucket.

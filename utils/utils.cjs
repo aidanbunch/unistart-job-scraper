@@ -33,8 +33,8 @@ function categorizeJob(jobTitle, jobSkills) {
 	const jobCategoriesMap = parseMappingFile(
 		Constants.Path.JobCategoriesMapping
 	);
-	// remove all "\", "/", ",", "(" and ")" from job titles and skills
-	const cleanedJobTitle = jobTitle.replace(/\\|\/|\,|\(|\)/g, "");
+	// remove all "\", "/", ",", "(", ")","-" and "+" from job titles and skills and replace them with a space
+	const cleanedJobTitle = jobTitle.replace(/\\|\/|\,|\(|\)|\-|\+/g, " ");
 	const cleanedJobSkills = jobSkills.map((skill) =>
 		skill.replace(/\\|\/|\,|\(|\)/g, "")
 	);
