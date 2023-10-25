@@ -21,6 +21,8 @@ exports.handler = async (event, context) => {
 			timeout: 900000,
 		});
 	} else {
+		chromium.headless = true;
+		
 		cluster = await Cluster.launch({
 			puppeteerOptions: {
 				args: chromium.args,
