@@ -1,5 +1,8 @@
    service: scrape
 
+   package:
+     individually: true
+
    provider:
      name: aws
      runtime: nodejs18.x
@@ -22,14 +25,21 @@
        handler: index.handler
        timeout: 900
        memorySize: 10240
+       layers:
+         - !Ref ChromiumbinLambdaLayer
        package:
-          include:
-            - mappings/**
-            - scrapers/**
-            - utils/**
+          patterns:
+            - '!layer/**'
+            - 'mappings/**'
+            - 'scrapers/**'
+            - 'utils/**'
        events:
          - schedule: cron(0 14 ? * MON *)
-    
+
+   layers:
+     chromiumbin:
+       package:
+          artifact: layer/chromium-v116.0.0-layer.zip
 
    plugins:
      - serverless-dotenv-plugin

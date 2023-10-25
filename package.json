@@ -1,22 +1,24 @@
 {
   "name": "unistart-job-scraper",
   "version": "1.0.0",
-  "description": "",
+  "description": "Scrapes entry level jobs from various job boards and returns them in a JSON format",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "deploy": "sls deploy",
+    "test": "sls invoke local -f entry-level-jobs",
+    "offline": "sls offline start"
   },
   "keywords": [],
-  "author": "",
+  "author": "Aidan Bunch",
   "license": "ISC",
   "devDependencies": {
     "serverless": "^3.34.0",
     "serverless-dotenv-plugin": "^6.0.0",
-    "serverless-offline": "^12.0.4"
+    "serverless-offline": "^12.0.4",
+    "@sparticuz/chromium": "^116.0.0",
+    "@sparticuz/chromium-min": "^116.0.0"
   },
   "dependencies": {
-    "@sparticuz/chromium": "^116.0.0",
-    "@sparticuz/chromium-min": "^116.0.0",
     "aws-sdk": "^2.1472.0",
     "axios": "^1.5.0",
     "dotenv": "^16.3.1",

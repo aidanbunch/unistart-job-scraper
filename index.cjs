@@ -4,8 +4,8 @@ const s3 = new AWS.S3({
 	accessKeyId: process.env.UNISTART_AWS_ACCESS_KEY_ID,
 	secretAccessKey: process.env.UNISTART_AWS_SECRET_ACCESS_KEY,
 });
-// const chromium = require("@sparticuz/chromium");
-const chromium = require("@sparticuz/chromium-min");
+const chromium = require("@sparticuz/chromium");
+// const chromium = require("@sparticuz/chromium-min");
 const { Cluster } = require("puppeteer-cluster");
 
 const ScrapingMap = require("./utils/map.cjs");
@@ -21,15 +21,14 @@ exports.handler = async (event, context) => {
 			timeout: 900000,
 		});
 	} else {
-		chromium.setHeadlessMode = true;
-
 		cluster = await Cluster.launch({
 			puppeteerOptions: {
 				args: chromium.args,
 				defaultViewport: chromium.defaultViewport,
-				executablePath: await chromium.executablePath(
-					"https://github.com/Sparticuz/chromium/releases/download/v116.0.0/chromium-v116.0.0-pack.tar"
-				),
+				// executablePath: await chromium.executablePath(
+				// 	"https://github.com/Sparticuz/chromium/releases/download/v116.0.0/chromium-v116.0.0-pack.tar"
+				// ),
+				executablePath: await chromium.executablePath(),
 				headless: chromium.headless,
 				ignoreHTTPSErrors: true,
 			},
@@ -58,6 +57,8 @@ exports.handler = async (event, context) => {
 	if (Constants.RunningLocally) {
 		writeJSONToOutputFile("jobs.json", formattedJobItems);
 	} else {
+		// log the first few job objects
+		console.log(formattedJobItems.slice(0, 5));
 		const params = {
 			Bucket: "scraped-job-objects",
 			Key: "jobs.json",
