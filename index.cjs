@@ -5,6 +5,7 @@ const s3 = new AWS.S3({
 	secretAccessKey: process.env.UNISTART_AWS_SECRET_ACCESS_KEY,
 });
 const chromium = require("@sparticuz/chromium");
+// chromium-min doesn't bundle the executable with the package
 // const chromium = require("@sparticuz/chromium-min");
 const { Cluster } = require("puppeteer-cluster");
 
@@ -21,12 +22,14 @@ exports.handler = async (event, context) => {
 			timeout: 900000,
 		});
 	} else {
+		// use old headless mode
 		chromium.headless = true;
 		
 		cluster = await Cluster.launch({
 			puppeteerOptions: {
 				args: chromium.args,
 				defaultViewport: chromium.defaultViewport,
+				// for using chromium-min and downloading executable from github
 				// executablePath: await chromium.executablePath(
 				// 	"https://github.com/Sparticuz/chromium/releases/download/v116.0.0/chromium-v116.0.0-pack.tar"
 				// ),
