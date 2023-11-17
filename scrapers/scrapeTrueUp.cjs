@@ -16,8 +16,8 @@ async function scrapeTrueUp(page, url) {
 	const passwordInput = await page.$("#password");
 	await usernameInput.type(Constants.Credentials.Username);
 	await passwordInput.type(Constants.Credentials.Password);
-	await page.waitForSelector("form.c1c5eaf7d.c39956dc7");
-	await page.$eval("form.c1c5eaf7d.c39956dc7", (form) => form.submit());
+	await page.waitForSelector("form.c03b1c121.c83ec54a2");
+	await page.$eval("form.c03b1c121.c83ec54a2", (form) => form.submit());
 
 	// wait for authentication to load and go through
 	await delay(Constants.Delays.Long);
