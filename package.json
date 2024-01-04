@@ -12,17 +12,18 @@
   "author": "Aidan Bunch",
   "license": "ISC",
   "devDependencies": {
+    "@sparticuz/chromium": "^116.0.0",
+    "@sparticuz/chromium-min": "^116.0.0",
     "serverless": "^3.34.0",
     "serverless-dotenv-plugin": "^6.0.0",
-    "serverless-offline": "^12.0.4",
-    "@sparticuz/chromium": "^116.0.0",
-    "@sparticuz/chromium-min": "^116.0.0"
+    "serverless-offline": "^12.0.4"
   },
   "dependencies": {
     "aws-sdk": "^2.1472.0",
     "axios": "^1.5.0",
     "dotenv": "^16.3.1",
     "fuse.js": "^6.6.2",
+    "parse-markdown-table": "^0.0.6",
     "puppeteer": "^21.1.1",
     "puppeteer-cluster": "^0.23.0"
   }
