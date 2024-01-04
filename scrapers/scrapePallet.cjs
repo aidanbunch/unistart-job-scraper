@@ -3,7 +3,6 @@ const axios = require("axios");
 const { delay } = require("../utils/utils.cjs");
 
 async function scrapePallet(page, url) {
-  await delay(Constants.Delays.Medium)
 	await page.goto(url, { waitUntil: "networkidle2", timeout: 0 });
 
 	// Extract the CSRF token from the cookies

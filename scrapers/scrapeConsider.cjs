@@ -2,7 +2,6 @@ const Constants = require("../utils/constants.cjs");
 const { delay } = require("../utils/utils.cjs");
 
 async function scrapeConsider(page, url) {
-	await delay(Constants.Delays.Short);
 	await page.goto(url, { waitUntil: "networkidle2", timeout: 0 });
 
 	let previousJobListLength = await page.evaluate(() => {

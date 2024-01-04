@@ -2,12 +2,12 @@ const Constants = require("../utils/constants.cjs");
 const { delay } = require("../utils/utils.cjs");
 
 async function scrapeBuiltIn(page, url) {
-	await delay(Constants.Delays.Medium);
 	await page.goto(url, { waitUntil: "networkidle2", timeout: 0 });
 	await page.setViewport({
 		width: Constants.WideViewportDimensions.width,
 		height: Constants.WideViewportDimensions.height,
 	});
+	await delay(Constants.Delays.Medium);
 
 	let jobItems = [];
 
@@ -89,7 +89,6 @@ async function scrapeBuiltIn(page, url) {
 
 			// If a "Next" button was found and it's not disabled, navigate to the next page
 			if (nextButton) {
-				await delay(Constants.Delays.Medium);
 				await page.goto(nextButton, { waitUntil: "networkidle2", timeout: 0 });
 			} else {
 				// If no "Next" button was found or it's disabled, we're done
