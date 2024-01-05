@@ -113,6 +113,9 @@ function cleanJobLinks(jobs) {
 	const cleanedJobs = jobs.map((job) => {
 		const jobLink = job["Job Link"];
 		// remove all query params from the url
+		if (!jobLink) {
+			return null;
+		}
 		let cleanedJobLink = jobLink.split("?")[0];
 		// filter out any jobs that don't have an a number in the url 
 		// they used query params to track specific job IDs, so we remove them
@@ -168,7 +171,7 @@ function normalizeLocationFields(jobs) {
 					let remoteResult = fuse.search(remoteLocation);
 					if (remoteResult.length > 0) {
 						let bestMatch = remoteResult[0].item.city;
-						return `Remote (${allCities[bestMatch] || "Worldwide"})`;
+						return `Remote (${usCities[bestMatch] ? "US" : "Worldwide"})`;
 					} else {
 						return "Remote (Worldwide)";
 					}
